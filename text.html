@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كاتب النصوص الذكي - Pollinations AI</title>
+    <!-- استيراد خط تجوال العربي لمظهر عصري -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4f46e5; /* نيلي */
+            --primary-hover: #4338ca;
+            --secondary-color: #64748b;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* تخطيط الصفحة */
+        header {
+            background: var(--card-bg);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+
+        h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h1 svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 1.5rem;
+            gap: 1.5rem;
+            height: calc(100vh - 70px); /* ارتفاع الرأس */
+        }
+
+        /* منطقة النص المُنشأ */
+        .output-container {
+            flex: 1;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .output-label {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+
+        #generated-text {
+            width: 100%;
+            height: 100%;
+            font-size: 1.1rem;
+            color: var(--text-color);
+            white-space: pre-wrap; /* للحفاظ على الأسطر الجديدة */
+            resize: none;
+            border: none;
+            background: transparent;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        #generated-text:empty::before {
+            content: 'سيظهر النص المُنشأ هنا...';
+            color: #94a3b8;
+        }
+
+        /* شريط الأدوات العلوي للنص */
+        .output-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--secondary-color);
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .icon-btn:hover {
+            background: #f1f5f9;
+            color: var(--primary-color);
+        }
+
+        /* منطقة الإدخال */
+        .input-area {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .settings-toggle {
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            user-select: none;
+        }
+
+        .settings-panel {
+            display: none;
+            background: #f1f5f9;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .settings-panel.open {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 0.25rem;
+            color: var(--secondary-color);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: inherit;
+        }
+
+        textarea#prompt-input {
+            width: 100%;
+            min-height: 80px;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            resize: none;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        textarea#prompt-input:focus {
+            border-color: var(--primary-color);
+        }
+
+        /* أزرار التحكم السفلية */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .main-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-danger {
+            background-color: white;
+            color: var(--danger-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-danger:hover {
+            background-color: #fef2f2;
+            border-color: var(--danger-color);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Loader */
+        .loader {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #ffffff;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+            display: none; /* مخفي افتراضياً */
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* إشعارات التوست */
+        #toast-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .toast {
+            background-color: #1e293b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* تجاوب الشاشات الصغيرة */
+        @media (max-width: 600px) {
+            main { padding: 1rem; }
+            .controls { flex-direction: column; gap: 1rem; align-items: stretch; }
+            .main-actions { justify-content: space-between; }
+            .btn { flex: 1; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+            كاتب النصوص الذكي
+        </h1>
+        <!-- يمكن إضافة زر إعدادات عامة هنا مستقبلاً -->
+    </header>
+
+    <main>
+        <!-- قسم النتائج -->
+        <section class="output-container">
+            <div class="output-header">
+                <span class="output-label">النتيجة</span>
+                <div class="output-actions">
+                    <button class="icon-btn" id="copy-btn" title="نسخ النص">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                    <button class="icon-btn" id="clear-output-btn" title="مسح النتيجة فقط">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <!-- منطقة النص التي يتم الكتابة فيها -->
+            <div id="generated-text" contenteditable="true" spellcheck="false"></div>
+        </section>
+
+        <!-- قسم الإدخال والتحكم -->
+        <section class="input-area">
+            
+            <!-- إعدادات متقدمة مخفية -->
+            <div class="settings-toggle" onclick="toggleSettings()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                إعدادات النظام (اختياري)
+            </div>
+            <div id="settings-panel" class="settings-panel">
+                <div class="form-group">
+                    <label for="system-prompt">شخصية الكاتب (System Prompt)</label>
+                    <input type="text" id="system-prompt" class="form-input" placeholder="مثال: أنت مساعد ذكي ومحترف في كتابة المقالات..." value="أنت كاتب محترف ومبدع. أكتب النصوص المطلوبة بوضوح ودقة">
+                </div>
+            </div>
+
+            <textarea id="prompt-input" placeholder="اكتب موضوعاً أو فكرة هنا (مثلاً: اكتب مقالاً قصيراً عن فوائد الذكاء الاصطناعي)..."></textarea>
+            
+            <div class="controls">
+                <button class="btn btn-danger" id="clear-all-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM15 9l-6 6M9 9l6 6"/></svg>
+                    مسح الكل
+                </button>
+                <div class="main-actions">
+                    <button class="btn btn-primary" id="generate-btn">
+                        <span class="btn-text">إنشاء النص</span>
+                        <span class="loader"></span>
+                    </button>
+                    <button class="btn btn-danger" id="stop-btn" style="display: none; border-color: var(--danger-color); background: #fef2f2;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12"></rect></svg>
+                        إيقاف
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- حاوية الإشعارات -->
+    <div id="toast-container"></div>
+
+    <script>
+        // المتغيرات والعناصر من DOM
+        const promptInput = document.getElementById('prompt-input');
+        const outputDiv = document.getElementById('generated-text');
+        const generateBtn = document.getElementById('generate-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const clearOutputBtn = document.getElementById('clear-output-btn');
+        const clearAllBtn = document.getElementById('clear-all-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const systemPromptInput = document.getElementById('system-prompt');
+        const settingsPanel = document.getElementById('settings-panel');
+        const btnText = generateBtn.querySelector('.btn-text');
+        const loader = generateBtn.querySelector('.loader');
+
+        // متغيرات التحكم في الطلب
+        let abortController = null;
+        let isGenerating = false;
+
+        // دالة لعرض التنبيهات (Toasts)
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            container.appendChild(toast);
+
+            // تفعيل الأنيميشن
+            setTimeout(() => toast.classList.add('show'), 10);
+
+            // إزالة التنبيه بعد 3 ثواني
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // تبديل لوحة الإعدادات
+        function toggleSettings() {
+            settingsPanel.classList.toggle('open');
+        }
+
+        // تحديث حالة واجهة المستخدم (أثناء التحميل/الإنهاء)
+        function setGeneratingState(state) {
+            isGenerating = state;
+            if (state) {
+                generateBtn.disabled = true;
+                btnText.style.display = 'none';
+                loader.style.display = 'inline-block';
+                stopBtn.style.display = 'flex';
+                promptInput.disabled = true;
+            } else {
+                generateBtn.disabled = false;
+                btnText.style.display = 'inline';
+                loader.style.display = 'none';
+                stopBtn.style.display = 'none';
+                promptInput.disabled = false;
+                promptInput.focus();
+            }
+        }
+
+        // الدالة الرئيسية لتوليد النص
+        async function generateText() {
+            const prompt = promptInput.value.trim();
+            
+            if (!prompt) {
+                showToast('الرجاء كتابة نص أو فكرة أولاً!');
+                promptInput.focus();
+                return;
+            }
+
+            // تحضير الرابط والمعاملات
+            // نقوم بترميز النص (URL Encoding)
+            const system = systemPromptInput.value.trim() || "أنت مساعد مفيد.";
+            const encodedPrompt = encodeURIComponent(prompt);
+            const encodedSystem = encodeURIComponent(system);
+            
+            // رابط API الخاص بـ Pollinations
+            // نضيف seed عشوائي لضمان التنوع في كل مرة
+            const seed = Math.floor(Math.random() * 100000);
+            const url = `https://text.pollinations.ai/${encodedPrompt}?system=${encodedSystem}&seed=${seed}&model=openai`;
+
+            setGeneratingState(true);
+            abortController = new AbortController();
+
+            outputDiv.innerHTML = ''; // مسح النص السابق (أو يمكن التعليق عليه للإضافة)
+
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    signal: abortController.signal
+                });
+
+                if (!response.ok) {
+                    throw new Error('حدث خطأ في الاتصال بالخدمة');
+                }
+
+                // قراءة الرد كـ Stream (تدفق)
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder("utf-8");
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    const chunk = decoder.decode(value, { stream: true });
+                    outputDiv.textContent += chunk;
+                    
+                    // التمرير التلقائي للأسفل
+                    outputDiv.scrollTop = outputDiv.scrollHeight;
+                }
+
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    showToast('تم إيقاف العملية.');
+                    outputDiv.textContent += '\n[تم إيقاف الكتابة...]';
+                } else {
+                    console.error(error);
+                    showToast('حدث خطأ أثناء الاتصال، حاول مرة أخرى.');
+                    outputDiv.textContent = 'عذراً، لم نتمكن من الاتصال بالخادم.';
+                }
+            } finally {
+                setGeneratingState(false);
+                abortController = null;
+            }
+        }
+
+        // إيقاف التوليد
+        function stopGeneration() {
+            if (abortController) {
+                abortController.abort();
+            }
+        }
+
+        // نسخ النص
+        function copyText() {
+            const text = outputDiv.textContent;
+            if (!text) {
+                showToast('لا يوجد نص لنسخه!');
+                return;
+            }
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('تم نسخ النص بنجاح!');
+            }).catch(() => {
+                showToast('فشل نسخ النص.');
+            });
+        }
+
+        // مسح النتيجة فقط
+        function clearOutput() {
+            outputDiv.innerHTML = '';
+            showToast('تم مسح النتيجة.');
+        }
+
+        // مسح الكل
+        function clearAll() {
+            promptInput.value = '';
+            outputDiv.innerHTML = '';
+            showToast('تم مسح كل شيء.');
+        }
+
+        // تفعيل الأحداث (Event Listeners)
+        generateBtn.addEventListener('click', generateText);
+        stopBtn.addEventListener('click', stopGeneration);
+        copyBtn.addEventListener('click', copyText);
+        clearOutputBtn.addEventListener('click', clearOutput);
+        clearAllBtn.addEventListener('click', clearAll);
+
+        // السماح بالضغط على Ctrl+Enter للإرسال
+        promptInput.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                generateText();
+            }
+        });
+
+    </script>
+</body>
+</html>
