@@ -139,13 +139,14 @@
         }
         .social-btn:hover { background: var(--accent-color); transform: translateY(-5px); }
 
-        /* --- Main Dashboard (Grid) --- */
+        /* --- Dashboard Grid (Linked Cards) --- */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 2rem;
         }
 
+        /* Card Styling modified for <a> tag */
         .card {
             background: var(--card-bg);
             border-radius: 15px;
@@ -157,9 +158,11 @@
             border: 1px solid rgba(255,255,255,0.05);
             transition: var(--transition);
             backdrop-filter: blur(10px);
+            display: block; /* Makes the <a> fill the grid cell */
+            text-decoration: none;
+            color: inherit;
         }
 
-        /* Hover Effect: Distinct Description */
         .card-content { z-index: 2; position: relative; }
         .card-icon { font-size: 2.5rem; color: var(--accent-color); margin-bottom: 1rem; transition: var(--transition); }
         .card-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
@@ -185,40 +188,16 @@
         .card:hover .card-icon { color: var(--accent-glow); text-shadow: 0 0 15px var(--accent-color); transform: scale(1.1); }
         .card:hover .card-desc { max-height: 100px; opacity: 1; transform: translateY(0); margin-top: 10px; }
 
-        /* --- Dynamic Workspace (When Tool Clicked) --- */
-        #workspace {
-            display: none; /* Hidden by default */
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--accent-color);
-            border-radius: 20px;
+        /* --- About Site Section --- */
+        .about-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.03);
             padding: 2rem;
-            margin-top: 2rem;
-            animation: slideDown 0.5s ease;
-            position: relative;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
         }
-        
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .workspace-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; }
-        .close-workspace { background: transparent; border: 1px solid #ef4444; color: #ef4444; padding: 5px 15px; border-radius: 5px; cursor: pointer; transition: var(--transition); }
-        .close-workspace:hover { background: #ef4444; color: white; }
-
-        /* Simulated Tool UIs */
-        .tool-ui { display: none; }
-        .tool-ui.active { display: block; }
-        
-        /* UI Components */
-        .mock-textarea { width: 100%; height: 200px; background: #000; color: #0f0; border: 1px solid #333; padding: 1rem; font-family: monospace; border-radius: 5px; resize: none; }
-        .mock-btn { padding: 10px 20px; background: var(--accent-color); border: none; color: white; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-        .mock-player { background: #111; padding: 20px; border-radius: 10px; text-align: center; border: 1px solid #333; }
-
-        /* --- Blog & About Sections --- */
-        .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .blog-card { background: var(--secondary-color); border-radius: 10px; overflow: hidden; transition: var(--transition); }
-        .blog-card:hover { transform: scale(1.02); }
-        .blog-img { height: 180px; background: #333; display: flex; align-items: center; justify-content: center; color: #555; }
-        .blog-content { padding: 1.5rem; }
-        .blog-date { font-size: 0.8rem; color: var(--accent-color); margin-bottom: 5px; display: block; }
 
         /* --- Footer --- */
         footer { text-align: center; padding: 2rem; background: var(--secondary-color); border-top: 1px solid rgba(255,255,255,0.05); margin-top: 4rem; }
@@ -245,7 +224,6 @@
             <ul id="nav-list">
                 <li><a href="#home">الرئيسية</a></li>
                 <li><a href="#dashboard">الأدوات والخدمات</a></li>
-                <li><a href="#blog-section">المدونة</a></li>
                 <li><a href="#about-site">عن الموقع</a></li>
             </ul>
         </nav>
@@ -273,11 +251,11 @@
                 <p style="color: var(--text-gray); margin-bottom: 15px;">مهندس ذكاء اصطناعي وخبير تسويق رقمي معتمد من Google.</p>
                 <p>أسس هذا الموقع ليكون منارة للمحتوى العربي التقني والتعليمي، مقدماً أدوات ومعلومات مفيدة للمجتمع العربي.</p>
                 <div class="social-icons">
-                    <a href="#" class="social-btn"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#" class="social-btn"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" class="social-btn"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" class="social-btn"><i class="fa-brands fa-tiktok"></i></a>
-                    <a href="#" class="social-btn"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="https://www.facebook.com/en.mohamed.nasr" target="_blank" class="social-btn"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://www.youtube.com/@MASRAWYPLUS" target="_blank" class="social-btn"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="https://www.instagram.com/mohamednasrofficial_/" target="_blank" class="social-btn"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@masrawy.plus" target="_blank" class="social-btn"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="https://wa.me/201279934735" target="_blank" class="social-btn"><i class="fa-brands fa-whatsapp"></i></a>
                 </div>
             </div>
         </div>
@@ -292,134 +270,87 @@
 
         <div class="dashboard-grid">
             
-            <!-- Tool 1 -->
-            <div class="card" onclick="openTool('tool-editor')">
+            <!-- Tool 1: Text Editor -->
+            <a href="https://mohamednasr5.github.io/nasr/text.html" target="_blank" class="card">
                 <div class="card-content">
                     <i class="fa-solid fa-pen-nib card-icon"></i>
                     <h3 class="card-title">تحرير النصوص بالذكاء الاصطناعي</h3>
                     <div class="card-desc">أداة متطورة تساعدك في صياغة وتدقيق النصوص العربية والإنجليزية بدقة عالية.</div>
                 </div>
-            </div>
+            </a>
 
-            <!-- Tool 2 -->
-            <div class="card" onclick="openTool('tool-tts')">
+            <!-- Tool 2: TTS -->
+            <a href="https://aistudio.google.com/apps/drive/1B7NhfEvV9X90zJdYk06uBIcVhWnyczgE?fullscreenApplet=true&showPreview=true&showAssistant=true" target="_blank" class="card">
                 <div class="card-content">
                     <i class="fa-solid fa-volume-high card-icon"></i>
                     <h3 class="card-title">تحويل النصوص إلى صوت</h3>
                     <div class="card-desc">حوّل مقالاتك إلى ملفات صوتية ناطقة بأصوات بشرية واقعية.</div>
                 </div>
-            </div>
+            </a>
 
-            <!-- Tool 3 -->
-            <div class="card" onclick="openTool('tool-fashion')">
+            <!-- Tool 3: Fashion Model -->
+            <a href="https://aistudio.google.com/apps/drive/1CxZbLqW4BYTQTGdFOcXjXsFHPVXiQThm?fullscreenApplet=true&showPreview=true&showAssistant=true" target="_blank" class="card">
                 <div class="card-content">
                     <i class="fa-solid fa-shirt card-icon"></i>
                     <h3 class="card-title">مودل ملابس بالذكاء الاصطناعي</h3>
                     <div class="card-desc">تصميم أزياء عصرية وتجربة الملابس رقمياً باستخدام تقنيات الذكاء الاصطناعي.</div>
                 </div>
-            </div>
+            </a>
 
-            <!-- Tool 4 -->
-            <div class="card" onclick="openTool('tool-veo')">
+            <!-- Tool 4: Veo Prompts -->
+            <a href="https://chat.z.ai/space/m1n0bk7gse81-art" target="_blank" class="card">
                 <div class="card-content">
                     <i class="fa-solid fa-video card-icon"></i>
                     <h3 class="card-title">إنشاء برومبتات Veo</h3>
                     <div class="card-desc">مولد أوامر نصية متخصص لإنشاء فيديوهات احترافية عبر نموذج Veo.</div>
                 </div>
-            </div>
+            </a>
 
-             <!-- Tool 5 -->
-             <div class="card" onclick="openTool('tool-gemini')">
+             <!-- Tool 5: Gemini Prompts -->
+             <a href="https://mohamednasr5.github.io/nasr/gemini.html" target="_blank" class="card">
                 <div class="card-content">
                     <i class="fa-solid fa-brain card-icon"></i>
                     <h3 class="card-title">برومبتات Gemini</h3>
                     <div class="card-desc">أفضل الأوامر (Prompts) لاستخراج أقصى إمكانيات من نموذج جوجل جيميني.</div>
                 </div>
-            </div>
+            </a>
 
-            <!-- Tool 6 -->
-            <div class="card" onclick="openTool('tool-remover')">
+            <!-- Tool 6: Remove Logo -->
+            <a href="https://mohamednasr5.github.io/nasr/remove.html" target="_blank" class="card">
                 <div class="card-content">
                     <i class="fa-solid fa-eraser card-icon"></i>
                     <h3 class="card-title">إزالة شعار Gemini</h3>
                     <div class="card-desc">أداة معالجة صور لإزالة العلامات المائية والشعارات من الصور المولدة.</div>
                 </div>
-            </div>
+            </a>
 
             <!-- NEW: Blog Link Card -->
-            <div class="card" style="border-color: #8b5cf6;" onclick="scrollToSection('blog-section')">
+            <a href="https://nasrapp.blogspot.com" target="_blank" class="card" style="border-color: #8b5cf6;">
                 <div class="card-content">
                     <i class="fa-solid fa-newspaper card-icon" style="color: #8b5cf6;"></i>
                     <h3 class="card-title">المدونة التقنية</h3>
                     <div class="card-desc">تصفح أحدث المقالات، الأخبار التقنية، وشروحات الذكاء الاصطناعي.</div>
                 </div>
-            </div>
+            </a>
 
-            <!-- NEW: About Site Link Card -->
-            <div class="card" style="border-color: #10b981;" onclick="scrollToSection('about-site')">
+            <!-- NEW: About Site Link Card (Internal) -->
+            <a href="#about-site" class="card" style="border-color: #10b981;">
                 <div class="card-content">
                     <i class="fa-solid fa-circle-info card-icon" style="color: #10b981;"></i>
                     <h3 class="card-title">عن الموقع</h3>
                     <div class="card-desc">تعرف على رؤية موقع النصر التقني، رسالتنا، وكيف نسعى لخدمة المجتمع العربي.</div>
                 </div>
-            </div>
-
-        </div>
-
-        <!-- Dynamic Workspace Area (Appears when tool clicked) -->
-        <div id="workspace">
-            <div class="workspace-header">
-                <h3 id="workspace-title" style="color: var(--accent-glow);">اسم الأداة</h3>
-                <button class="close-workspace" onclick="closeWorkspace()">إغلاق <i class="fa-solid fa-xmark"></i></button>
-            </div>
-
-            <!-- Tool UI: Editor -->
-            <div id="tool-editor" class="tool-ui">
-                <p style="margin-bottom: 10px; color: var(--text-gray);">أدخل النص المراد تحريره أو تحسينه:</p>
-                <textarea class="mock-textarea" placeholder="اكتب نصك هنا... سيقوم الذكاء الاصطناعي بمساعدتك..."></textarea>
-                <div style="margin-top: 15px;">
-                    <button class="mock-btn"><i class="fa-solid fa-wand-magic-sparkles"></i> تحسين النص</button>
-                    <button class="mock-btn" style="background: #475569;"><i class="fa-solid fa-copy"></i> نسخ</button>
-                </div>
-            </div>
-
-            <!-- Tool UI: TTS -->
-            <div id="tool-tts" class="tool-ui">
-                <div class="mock-player">
-                    <i class="fa-solid fa-microphone-lines" style="font-size: 3rem; color: var(--accent-color); margin-bottom: 1rem;"></i>
-                    <p>جاري تحويل النص إلى صوت...</p>
-                    <div style="margin-top: 20px; height: 4px; width: 80%; background: #333; margin-left: auto; margin-right: auto; border-radius: 2px;">
-                        <div style="height: 100%; width: 40%; background: var(--accent-color);"></div>
-                    </div>
-                    <div style="margin-top: 10px;">
-                        <button class="mock-btn"><i class="fa-solid fa-play"></i> تشغيل</button>
-                        <button class="mock-btn" style="background: #475569;"><i class="fa-solid fa-download"></i> تحميل MP3</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Placeholder for other tools -->
-            <div id="tool-fashion" class="tool-ui">
-                <div class="mock-player" style="border: 2px dashed var(--accent-color); background: transparent;">
-                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                    <p>قم برفع صورة النموذج أو الملابس هنا</p>
-                    <button class="mock-btn" style="margin-top: 10px;">رفع صورة</button>
-                </div>
-            </div>
-
-            <div id="tool-veo" class="tool-ui"><h3 style="text-align:center;">مولد برومبتات فيديو Veo</h3><textarea class="mock-textarea" placeholder="وصف المشهد المراد توليده..."></textarea><button class="mock-btn">توليد البرومبت</button></div>
-            <div id="tool-gemini" class="tool-ui"><h3 style="text-align:center;">مساعد جيميني</h3><textarea class="mock-textarea" placeholder="اكتب استفسارك لجيميني..."></textarea><button class="mock-btn">إرسال</button></div>
-            <div id="tool-remover" class="tool-ui"><h3 style="text-align:center;">إزالة الخلفية/الشعار</h3><div class="mock-player"><i class="fa-solid fa-image" style="font-size:2rem;"></i><p>لا يوجد صورة محددة</p></div></div>
+            </a>
 
         </div>
     </section>
 
-    <!-- About Site Section (New) -->
+    <!-- About Site Section -->
     <section id="about-site">
         <div class="section-header">
             <h2>عن موقع النصر التقني</h2>
         </div>
-        <div style="max-width: 800px; margin: 0 auto; background: rgba(255,255,255,0.03); padding: 2rem; border-radius: 15px; text-align: center;">
+        <div class="about-container">
             <p style="font-size: 1.1rem; margin-bottom: 1rem;">
                 موقع النصر التقني هو موقع إلكتروني عربي شامل يُقدّم محتوى متنوّعًا في مجالات التقنية والتعليم والمنوعات والمعلومات العامة، وغير ذلك من الأقسام المفيدة للزائرين العرب.
             </p>
@@ -429,43 +360,14 @@
         </div>
     </section>
 
-    <!-- Blog Section (New) -->
-    <section id="blog-section">
-        <div class="section-header">
-            <h2>المدونة التقنية</h2>
-        </div>
-        <div class="blog-grid">
-            <div class="blog-card">
-                <div class="blog-img"><i class="fa-solid fa-robot fa-3x"></i></div>
-                <div class="blog-content">
-                    <span class="blog-date">29 يناير 2026</span>
-                    <h3>مستقبل الذكاء الاصطناعي في 2027</h3>
-                    <p style="color: #94a3b8; font-size: 0.9rem;">نظرة شاملة على التوقعات المستقبلية لتقنيات الـ AI...</p>
-                </div>
-            </div>
-            <div class="blog-card">
-                <div class="blog-img"><i class="fa-solid fa-code fa-3x"></i></div>
-                <div class="blog-content">
-                    <span class="blog-date">25 يناير 2026</span>
-                    <h3>كيف تبدأ البرمجة من الصفر؟</h3>
-                    <p style="color: #94a3b8; font-size: 0.9rem;">دليلك الشامل لاختيار لغة البرمجة الأولى...</p>
-                </div>
-            </div>
-            <div class="blog-card">
-                <div class="blog-img"><i class="fa-brands fa-google fa-3x"></i></div>
-                <div class="blog-content">
-                    <span class="blog-date">20 يناير 2026</span>
-                    <h3>أحدث تحديثات جوجل لليوتيوب</h3>
-                    <p style="color: #94a3b8; font-size: 0.9rem;">كل ما يخص صانعي المحتوى في التحديث الجديد...</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer>
         <div class="footer-links">
-            <a href="#">اتصل بنا</a> | <a href="#">سياسة الخصوصية</a> | <a href="#">الشروط والأحكام</a>
+            <a href="https://nasrapp.blogspot.com" target="_blank">المدونة</a>
+            <span>|</span>
+            <a href="#owner">عن المالك</a>
+            <span>|</span>
+            <a href="#">سياسة الخصوصية</a>
         </div>
         <p style="margin-top: 10px; color: #64748b;">&copy; 2026 موقع النصر التقني - جميع الحقوق محفوظة</p>
     </footer>
@@ -540,39 +442,7 @@
         initParticles();
         animate();
 
-        // --- 2. Workspace Logic ---
-        function openTool(toolId) {
-            const workspace = document.getElementById('workspace');
-            const titleEl = document.getElementById('workspace-title');
-            const toolName = document.querySelector(`.card[onclick="openTool('${toolId}')"] .card-title`).innerText;
-            
-            // Hide all UIs
-            document.querySelectorAll('.tool-ui').forEach(el => el.classList.remove('active'));
-            
-            // Show target UI
-            document.getElementById(toolId).classList.add('active');
-            
-            // Set title
-            titleEl.innerText = toolName;
-            
-            // Show workspace
-            workspace.style.display = 'block';
-            
-            // Scroll to workspace smoothly
-            setTimeout(() => {
-                workspace.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 100);
-        }
-
-        function closeWorkspace() {
-            document.getElementById('workspace').style.display = 'none';
-        }
-
-        function scrollToSection(sectionId) {
-            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // --- 3. Mobile Menu ---
+        // --- 2. Mobile Menu ---
         const menuToggle = document.querySelector('.menu-toggle');
         const navList = document.getElementById('nav-list');
         menuToggle.addEventListener('click', () => {
